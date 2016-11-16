@@ -17,6 +17,10 @@ public class DebugMouseController : BallController {
      private float angle;
      private float Angle { get { return angle; } set { angle = value * ANGLE_MULTIPLIER; } }
 
+     private const float MAX_OFFSET = 2.5f;
+     public float movementStepping = 0.1f;
+     private float lateralOffset = 0;
+
      public override float GetInputAngle() {
           return Angle;
      }
@@ -33,13 +37,12 @@ public class DebugMouseController : BallController {
           return launched;
      }
 
-     // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+     public override float GetLateralOffset() {
+          return lateralOffset;
+     }
+
+     // Update is called once per frame
+     void Update () {
           if (Input.GetMouseButtonDown(0)) {
                launched = true;
                spin = Vector3.zero;
@@ -49,6 +52,18 @@ public class DebugMouseController : BallController {
           } else {
                launched = false;
           }
+
           Angle = Input.GetAxis("Mouse ScrollWheel");
+
+          if (Input.GetKey(KeyCode.A)) {
+               lateralOffset -= movementStepping;
+          } else if (Input.GetKey(KeyCode.D)) {
+               lateralOffset += movementStepping;
+          }
+
+          if (lateralOffset < -MAX_OFFSET)
+               lateralOffset = -MAX_OFFSET;
+          else if (lateralOffset > MAX_OFFSET)
+               lateralOffset = MAX_OFFSET;
 	}
 }

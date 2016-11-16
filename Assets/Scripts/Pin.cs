@@ -6,15 +6,13 @@ public class Pin : MonoBehaviour {
 	public float standingThreshold = 3f;
 	public float distToRaise = 40f;
 
-    public bool Fell { get; private set; }
-
     private Rigidbody rigidBody;
-    
+     private Vector3 startingPosition;
 	
 	// Use this for initialization
 	void Start () {
-		rigidBody = GetComponent<Rigidbody> ();
-          Fell = false;
+		  rigidBody = GetComponent<Rigidbody> ();
+          startingPosition = transform.position;
 	}
 
 	// Update is called once per frame
@@ -29,24 +27,21 @@ public class Pin : MonoBehaviour {
 		float tiltInZ = Mathf.Abs(rotationInEuler.z);
 
 		if (tiltInX < standingThreshold && tiltInZ < standingThreshold) {
-		  Fell = false;
           return true;
 		} else {
-          Fell = true;
           return false;
 		}
 	}
 
-	public void RaiseIfStanding () {
-		if (IsStanding ()) {
-			rigidBody.useGravity = false;
-			transform.Translate (new Vector3 (0, distToRaise, 0), Space.World);
-			transform.rotation = Quaternion.Euler (270f, 0, 0);
-		}
+	public void Raise () {
+          transform.position = startingPosition;
+		  rigidBody.useGravity = false;
+		  transform.Translate (new Vector3 (0, distToRaise, 0), Space.World);
+		  transform.rotation = Quaternion.Euler (270f, 0, 0);
 	}
 
 	public void Lower () {
-		transform.Translate (new Vector3 (0, -distToRaise, 0), Space.World);
+          transform.position = startingPosition;
 		rigidBody.useGravity = true;
 	}
 

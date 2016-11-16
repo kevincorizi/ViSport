@@ -5,6 +5,7 @@ public class Ball : MonoBehaviour {
 
      public Vector3 lockedPosition;
      private Vector3 startingPosition;
+     private Vector3 startingPivotPosition;
      private Vector3 launchDirection = new Vector3(0, 1, 1);
      public GameObject pivot;
      public float radius;
@@ -42,6 +43,7 @@ public class Ball : MonoBehaviour {
      public void Reset() {
           InPlay = false;
           transform.position = startingPosition;
+          transform.rotation = Quaternion.Euler(0, 0, 0);
           rb.isKinematic = true;
           rb.useGravity = false;
      }
@@ -61,6 +63,7 @@ public class Ball : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
           startingPosition = transform.position;
+          startingPivotPosition = pivot.transform.position;
           rb = GetComponent<Rigidbody>();
           controller = controllerObject.GetComponent<BallController>();
           Reset();
@@ -87,6 +90,10 @@ public class Ball : MonoBehaviour {
                transform.position = pivot.transform.position;
                transform.Translate(0, -radius, 0);
                transform.RotateAround(pivot.transform.position, Vector3.right, currentAngle);
+
+               //Update pivo
+               pivot.transform.position = startingPivotPosition;
+               pivot.transform.Translate(controller.GetLateralOffset(), 0, 0);
           }
 	}
 }

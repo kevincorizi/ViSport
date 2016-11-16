@@ -10,7 +10,10 @@ public class GameMaster : MonoBehaviour {
      private Ball ball;
      
      private float stillnessTimer = 0;
-     private const float stillnessTimeout = 5;
+     private const float STILLNESS_TIMEOUT = 5;
+
+     private float cleanupTimer = 0;
+     private const float CLEANUP_TIMEOUT = 5;
 
      private int bowlCounter = 0;
      private int[] scores = new int[21];
@@ -63,7 +66,7 @@ public class GameMaster : MonoBehaviour {
      private void UpdateCounting() {
           if (ballReachedPins) {
                stillnessTimer += Time.deltaTime;
-               if (stillnessTimer > stillnessTimeout || pinMaster.AllPinsStill()) {
+               if (stillnessTimer > STILLNESS_TIMEOUT || pinMaster.AllPinsStill()) {
                     scores[bowlCounter] = pinMaster.GetFallenPins().Count;
                     LogScore();
 
@@ -100,11 +103,16 @@ public class GameMaster : MonoBehaviour {
       *   reset all game items. For now it just resets.
       */
      private void UpdateCleanup() {
-          bowlCounter++;
-          ball.Reset();
-          ballReachedPins = false;
-          stillnessTimer = 0;
-          state = EGameState.PRE_LAUNCH;
+          if (cleanupTimer < CLEANUP_TIMEOUT) {
+               cleanupTimer += Time.deltaTime;
+          } else {
+               cleanupTimer = 0;
+               bowlCounter++;
+               pinMaster.LowerAll();
+               ball.Reset();
+               ballReachedPins = false;
+               state = EGameState.PRE_LAUNCH;
+          }
      }
 
      private void NextLaunch(bool cleanAll) {
@@ -113,6 +121,8 @@ public class GameMaster : MonoBehaviour {
           } else {
                pinMaster.CleanAllFallen();
           }
+          pinMaster.RaiseAll();
+          stillnessTimer = 0;
           state = EGameState.CLEANUP;
      }
 

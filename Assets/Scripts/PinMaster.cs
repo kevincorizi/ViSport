@@ -17,11 +17,19 @@ public class PinMaster : MonoBehaviour {
           return fallen;
      }
 
+     public void RaiseAll() {
+          foreach (Pin p in pins)
+               p.Raise();
+     }
+
+     public void LowerAll() {
+          foreach (Pin p in pins)
+               p.Lower();
+     }
+
      public void CleanAllPins() {
           foreach (Pin p in pins) {
                p.gameObject.SetActive(true);
-               p.Raise();
-               p.Lower();
           }
      }
 

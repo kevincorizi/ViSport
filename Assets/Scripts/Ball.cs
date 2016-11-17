@@ -13,7 +13,7 @@ public class Ball : MonoBehaviour {
      private BallController controller;
 
      private Rigidbody rb;
-     private bool locked = true;
+     private bool locked = false;
      public bool InPlay { get; private set; }
      private float currentAngle = 0;
      private float nextAngle = 0;
@@ -63,6 +63,7 @@ public class Ball : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
           startingPosition = transform.position;
+          lockedPosition = transform.position;
           startingPivotPosition = pivot.transform.position;
           rb = GetComponent<Rigidbody>();
           controller = controllerObject.GetComponent<BallController>();
@@ -75,7 +76,7 @@ public class Ball : MonoBehaviour {
                // stuff?
           } else if (controller.HasPlayerLaunched()) {
                Launch(controller.GetLaunchForce(), controller.GetLaunchSpin());
-          } else {
+          } else if (!locked) {
                //Update Angle
                float inputAngle = controller.GetInputAngle();
                if (inputAngle != nextAngle) {

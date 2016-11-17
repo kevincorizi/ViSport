@@ -40,7 +40,12 @@ public class PinMaster : MonoBehaviour {
      }
 
      public bool AllPinsStill() {
-          return false;
+          foreach (Pin p in pins) {
+               if (!p.IsStill())
+                    return false;
+          }
+
+          return true;
      }
 
 	// Use this for initialization

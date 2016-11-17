@@ -7,11 +7,12 @@ public class Pin : MonoBehaviour {
 	public float distToRaise = 2f;
 
     private Rigidbody rigidBody;
-     public Vector3 startingPosition = Vector3.zero;
+    private Vector3 startingPosition;
 	
 	// Use this for initialization
 	void Start () {
 		  rigidBody = GetComponent<Rigidbody> ();
+          startingPosition = transform.localPosition;
 	}
 
 	// Update is called once per frame
@@ -33,8 +34,10 @@ public class Pin : MonoBehaviour {
 	}
 
 	public void Raise () {
-          transform.position = startingPosition;
-		  rigidBody.useGravity = false;
+          transform.localPosition = startingPosition;
+          rigidBody.velocity = Vector3.zero;
+          rigidBody.angularVelocity = Vector3.zero;
+          rigidBody.useGravity = false;
 		  transform.Translate (new Vector3 (0, distToRaise, 0), Space.World);
 		  transform.rotation = Quaternion.Euler (270f, 0, 0);
 	}

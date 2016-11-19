@@ -6,17 +6,18 @@ public class GameMaster : MonoBehaviour {
 
      public bool ballReachedPins = false;
 
+     private ScoreMaster scoreMaster;
      private PinMaster pinMaster;
      private Ball ball;
      
      private float stillnessTimer = 0;
-     private const float STILLNESS_TIMEOUT = 5;
+     private const float STILLNESS_TIMEOUT = 15;
+     private const float STILLNESS_MIN = 6;
 
      private float cleanupTimer = 0;
-     private const float CLEANUP_TIMEOUT = 5;
+     private const float CLEANUP_TIMEOUT = 2;
 
      private int bowlCounter = 0;
-     private int[] scores = new int[21];
 
      private enum EGameState {
           TUTORIAL,
@@ -32,11 +33,9 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
           state = EGameState.PRE_LAUNCH;
+          scoreMaster = GameObject.FindObjectOfType<ScoreMaster>();
           pinMaster = GameObject.FindObjectOfType<PinMaster>();
           ball = GameObject.FindObjectOfType<Ball>();
-
-          for (int i = 0; i < 20; i++)
-               scores[i] = 0;
 	}
 	
 	// Update is called once per frame
@@ -66,12 +65,14 @@ public class GameMaster : MonoBehaviour {
      private void UpdateCounting() {
           if (ballReachedPins) {
                stillnessTimer += Time.deltaTime;
-               if (stillnessTimer > STILLNESS_TIMEOUT || pinMaster.AllPinsStill()) {
-                    scores[bowlCounter] = pinMaster.GetFallenPins().Count;
-                    LogScore();
+               if (stillnessTimer > STILLNESS_TIMEOUT ||    // Max time elapsed
+                    (stillnessTimer > STILLNESS_MIN && pinMaster.AllPinsStill())) {  // Min time elapsed and all pins are still
+                    scoreMaster.AddScore(pinMaster.GetFallenPins().Count);
+                    int[] scores = scoreMaster.GetScores();
+                    LogScore(scores);
 
                     if (bowlCounter == 20) {
-                         //Todo: gameover
+                         GameOver();
                     } else if (bowlCounter >= 18 && scores[bowlCounter] == 10) { // Handle last-frame special cases
                          NextLaunch(true);
                     } else if (bowlCounter == 19) {
@@ -82,11 +83,12 @@ public class GameMaster : MonoBehaviour {
                          } else if (scores[18] + scores[19] >= 10) {  // Roll 21 awarded
                               NextLaunch(false);
                          } else {
-                              // Todo: gameover
+                              GameOver();
                          }
                     } else if (bowlCounter % 2 == 0) { // First bowl of frame
                          if (scores[bowlCounter] == 10) {
                               bowlCounter++;
+                              scoreMaster.AddScore(0); // Virtual 0 after strike
                               NextLaunch(true);
                          } else {
                               NextLaunch(false);
@@ -126,7 +128,17 @@ public class GameMaster : MonoBehaviour {
           state = EGameState.CLEANUP;
      }
 
-     private void LogScore() {
+     private void GameOver() {
+          /*ball.Reset();
+          ball.Lock();
+          state = EGameState.GAME_OVER;*/
+          NextLaunch(true);
+          scoreMaster.ResetFrames();
+          scoreMaster.ResetScores();
+          bowlCounter = -1;
+     }
+
+     private void LogScore(int[] scores) {
           string output = "";
           foreach (int s in scores) {
                output += s + " ";

@@ -13,11 +13,11 @@ public class Ball : MonoBehaviour {
      private BallController controller;
 
      private Rigidbody rb;
-     private bool locked = true;
+     private bool locked = false;
      public bool InPlay { get; private set; }
      private float currentAngle = 0;
      private float nextAngle = 0;
-     private float itpDelta = 0.1f;
+     private float itpDelta = 0.2f;
      private float itpTime = 0;
 
      public void SetAngle(float angle) {
@@ -28,7 +28,8 @@ public class Ball : MonoBehaviour {
           if (alpha > 1) alpha = 1;
           if (alpha < 0) alpha = 0;
 
-          return currentAngle + (nextAngle - currentAngle) * alpha;
+          return Mathf.Lerp(currentAngle, nextAngle, alpha);
+          //return currentAngle + (nextAngle - currentAngle) * alpha;
      }
 
      public void Launch(Vector3 force, Vector3 spin) {
@@ -60,40 +61,42 @@ public class Ball : MonoBehaviour {
           rb.constraints = RigidbodyConstraints.None;
      }
 
-	// Use this for initialization
-	void Start () {
+     // Use this for initialization
+     void Start() {
           startingPosition = transform.position;
+          lockedPosition = transform.position;
           startingPivotPosition = pivot.transform.position;
           rb = GetComponent<Rigidbody>();
           controller = controllerObject.GetComponent<BallController>();
           Reset();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	      if (InPlay) {
+          controller.Reset();
+     }
+
+     // Update is called once per frame
+     void Update() {
+          if (InPlay) {
                // stuff?
           } else if (controller.HasPlayerLaunched()) {
                Launch(controller.GetLaunchForce(), controller.GetLaunchSpin());
-          } else {
+          } else if (!locked) {
                //Update Angle
                float inputAngle = controller.GetInputAngle();
                if (inputAngle != nextAngle) {
+                    currentAngle = nextAngle;
                     nextAngle = inputAngle;
                     itpTime = 0;
                } else {
                     itpTime += Time.deltaTime;
                }
                currentAngle = InterpolateAngle(itpTime / itpDelta);
+               //Debug.Log("Current Angle" + currentAngle + "\nalpha: " + itpTime / itpDelta + "\nNextAngle " + nextAngle);
 
                //Update transform
-               transform.position = pivot.transform.position;
-               transform.Translate(0, -radius, 0);
-               transform.RotateAround(pivot.transform.position, Vector3.right, currentAngle);
+               transform.position = pivot.transform.position + Quaternion.Euler(-currentAngle, 0, 0) * new Vector3(0, -radius, 0);
 
                //Update pivo
                pivot.transform.position = startingPivotPosition;
                pivot.transform.Translate(controller.GetLateralOffset(), 0, 0);
           }
-	}
+     }
 }

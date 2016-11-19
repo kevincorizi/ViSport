@@ -7,4 +7,5 @@ public abstract class BallController : MonoBehaviour {
      public abstract Vector3 GetLaunchForce();
      public abstract Vector3 GetLaunchSpin();
      public abstract float GetLateralOffset();
+     public abstract void Reset();
 }

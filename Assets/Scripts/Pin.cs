@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Pin : MonoBehaviour {
 
-	public float standingThreshold = 3f;
-	public float distToRaise = 2f;
+     private float stillVelThreshold = 1f;
+     private float stillAngThreshold = 2f;
+	private float standingThreshold = 10f;
+	private float distToRaise = 2f;
 
     private Rigidbody rigidBody;
     private Vector3 startingPosition;
@@ -15,11 +17,15 @@ public class Pin : MonoBehaviour {
           startingPosition = transform.localPosition;
 	}
 
-	// Update is called once per frame
-	void Update () {
-          
-	}
-	
+     public bool IsStill() {
+          if (rigidBody.velocity.magnitude < stillVelThreshold &&
+               rigidBody.angularVelocity.magnitude < stillAngThreshold) {
+               return true;
+          } else {
+               return false;
+          }
+     }
+
 	public bool IsStanding () {
 		Vector3 rotationInEuler = transform.rotation.eulerAngles;
 

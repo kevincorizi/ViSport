@@ -135,6 +135,7 @@ public class GameMaster : MonoBehaviour {
           NextLaunch(true);
           scoreMaster.ResetFrames();
           scoreMaster.ResetScores();
+          bowlCounter = -1;
      }
 
      private void LogScore(int[] scores) {

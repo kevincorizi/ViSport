@@ -4,8 +4,8 @@ using System.Collections;
 public class Pin : MonoBehaviour {
 
      private float stillVelThreshold = 1f;
-     private float stillAngThreshold = 5f;
-	private float standingThreshold = 5f;
+     private float stillAngThreshold = 2f;
+	private float standingThreshold = 10f;
 	private float distToRaise = 2f;
 
     private Rigidbody rigidBody;

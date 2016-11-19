@@ -22,7 +22,7 @@ public class ScoreMaster : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+          ResetFrames();
 	}
 	
 	// Update is called once per frame
@@ -37,6 +37,15 @@ public class ScoreMaster : MonoBehaviour {
                dirty = false;
           }
 	}
+
+     private void ResetFrames() {
+          int i = 0;
+          foreach (Transform child in transform) {
+               foreach (Transform score in child) {
+                    score.gameObject.GetComponent<Text>().text = "";
+               }
+          }
+     }
 
      private void UpdateFrames() {
           int[] totalScores = new int[10];

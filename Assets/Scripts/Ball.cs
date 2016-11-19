@@ -89,7 +89,7 @@ public class Ball : MonoBehaviour {
                     itpTime += Time.deltaTime;
                }
                currentAngle = InterpolateAngle(itpTime / itpDelta);
-               Debug.Log("Current Angle" + currentAngle + "\nalpha: " + itpTime / itpDelta + "\nNextAngle " + nextAngle);
+               //Debug.Log("Current Angle" + currentAngle + "\nalpha: " + itpTime / itpDelta + "\nNextAngle " + nextAngle);
 
                //Update transform
                transform.position = pivot.transform.position + Quaternion.Euler(-currentAngle, 0, 0) * new Vector3(0, -radius, 0);

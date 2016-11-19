@@ -11,8 +11,8 @@ public class GameMaster : MonoBehaviour {
      private Ball ball;
      
      private float stillnessTimer = 0;
-     private const float STILLNESS_TIMEOUT = 3;
-     private const float STILLNESS_MIN = 3;
+     private const float STILLNESS_TIMEOUT = 15;
+     private const float STILLNESS_MIN = 6;
 
      private float cleanupTimer = 0;
      private const float CLEANUP_TIMEOUT = 2;

@@ -8,8 +8,10 @@ public class BroadcastReceiver : BallController
      private float inputAngle = 0;
      private float angleMod = 13f;
 
-     private const float launchThreshold = 2f;
+     private const float launchThreshold = 1.5f;
      private float inputAccel;
+
+     private float inputEffect = 0;
 
      private const float maxLaunchMagnitude = 150;
      public Vector3 launchVector = new Vector3(0, 0.25f, 1);
@@ -47,6 +49,14 @@ public class BroadcastReceiver : BallController
                inputAccel = z;
           }
 
+          inputEffect = -x / 30;
+
+          if (inputEffect < -0.025) {
+               inputEffect = -0.025f;
+          } else if (inputEffect > 0.025) {
+               inputEffect = 0.025f;
+          }
+
           //Debug.Log(javaMessage + " " + parts.Length + "\nAngle: " + Angle);
 
           //Debug.Log("Message: " + javaMessage);
@@ -65,7 +75,7 @@ public class BroadcastReceiver : BallController
      }
 
      public override Vector3 GetLaunchForce() {
-          return launchVector.normalized * Math.Min(launchModifier * inputAccel, maxLaunchMagnitude);
+          return (launchVector + new Vector3(inputEffect,0,0)).normalized * Math.Min(launchModifier * inputAccel, maxLaunchMagnitude);
      }
 
      public override Vector3 GetLaunchSpin() {

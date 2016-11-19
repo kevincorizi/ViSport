@@ -33,3 +33,16 @@ sysinfo.txt
 ehthumbs.db
 [Tt]humbs.db
 [Dd]esktop.ini
+
+# ============== #
+# Android Studio #
+# ============== #
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild

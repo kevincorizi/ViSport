@@ -129,9 +129,12 @@ public class GameMaster : MonoBehaviour {
      }
 
      private void GameOver() {
-          ball.Reset();
+          /*ball.Reset();
           ball.Lock();
-          state = EGameState.GAME_OVER;
+          state = EGameState.GAME_OVER;*/
+          NextLaunch(true);
+          scoreMaster.ResetFrames();
+          scoreMaster.ResetScores();
      }
 
      private void LogScore(int[] scores) {

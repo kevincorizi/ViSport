@@ -1081,11 +1081,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 146263825}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0056eafd21bd084f8617b907e6f341a, type: 3}
+  m_Script: {fileID: 11500000, guid: 28d6947aca926494dacf83cab60fc6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceMultiplier: 200
   launchVector: {x: 0, y: 0.25, z: 1}
-  launchModifier: 60
+  effectSpin: {x: 0, y: 0, z: 0}
+  movementStepping: 0.1
 --- !u!4 &146263827
 Transform:
   m_ObjectHideFlags: 0

@@ -38,7 +38,12 @@ public class ScoreMaster : MonoBehaviour {
           }
 	}
 
-     private void ResetFrames() {
+     public void ResetScores() {
+          scores.Clear();
+          formattedScores.Clear();
+     }
+
+     public void ResetFrames() {
           int i = 0;
           foreach (Transform child in transform) {
                foreach (Transform score in child) {

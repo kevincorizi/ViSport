@@ -4,7 +4,7 @@ using System;
 
 public class DebugMouseController : BallController {
 
-     private const float ANGLE_MULTIPLIER = 100;
+     private const float ANGLE_MULTIPLIER = 10;
 
      public float forceMultiplier = 10;
      public Vector3 launchVector = new Vector3(0, 10, 10);
@@ -53,7 +53,13 @@ public class DebugMouseController : BallController {
                launched = false;
           }
 
-          Angle = Input.GetAxis("Mouse ScrollWheel");
+          if (Input.GetKeyDown(KeyCode.UpArrow)) {
+               angle += ANGLE_MULTIPLIER;
+          } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+               angle -= ANGLE_MULTIPLIER;
+          }
+
+          //Angle = Input.GetAxis("Mouse ScrollWheel");
 
           if (Input.GetKey(KeyCode.A)) {
                lateralOffset -= movementStepping;
@@ -66,4 +72,8 @@ public class DebugMouseController : BallController {
           else if (lateralOffset > MAX_OFFSET)
                lateralOffset = MAX_OFFSET;
 	}
+
+     public override void Reset() {
+          return;
+     }
 }
